@@ -1,0 +1,20 @@
+% Source - https://tex.stackexchange.com/a/8646
+% Posted by Caramdir, modified by community. See post 'Timeline' for change history
+% Retrieved 2026-02-03, License - CC BY-SA 3.0
+
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{grafcet}
+
+\begin{document}
+
+\begin{figure}
+\begin{tikzpicture}
+\EtapeInitTransition[0,0]{0}{}{$Rec_0$}
+\EtapeTransition{1}{$Task_1$}{$Rec_1$}
+\EtapeTransition{2}{$Task_{2a}$,$Task_{2b}$}{$Rec_2$}
+\EtapeTransition{3}{$Task_3$}{$Rec_3$}
+\LienRetour{T3}{X0}
+\end{tikzpicture}
+\end{figure}
+\end{document}
