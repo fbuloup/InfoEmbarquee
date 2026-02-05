@@ -21,8 +21,12 @@
 \begin{figure}
 \begin{tikzpicture}
 \EtapeInitTransition[0,0]{0}{}{$\underline{1}$}
-\EtapeTransition{1}{$Red\: Led\: OFF$, $Tempo = 5sec$}{$bp\_1\downarrow$}
-\EtapeTransition{2}{$Red\: Led\: ON$}{$Tempo/X2+bp\_1\downarrow$}
+\EtapeTransition{1}{$Red\: Led\: OFF$}{$bp\_1\downarrow$}
+\Etape{2}
+\ActionX{X2}{$Red\: Led\: ON$}
+\Action{X2}{$T_{end} = time + 5sec$}
+\ActionActiv{X2}
+\Transition{2}\Recept{T2}{$time > T_{end}+bp\_1\downarrow$}
 \LienRetour{T2}{X0}
 \end{tikzpicture}
 \end{figure}
@@ -30,11 +34,14 @@
 \begin{figure}
 \begin{tikzpicture}
 \EtapeInitTransition[0,0]{0}{}{$\underline{1}$}
-\EtapeTransition{1}{$Green\: Led\: OFF$, $Tempo = 5sec$}{$bp\_2\downarrow$}
+\EtapeTransition{1}{$Green\: Led\: OFF$}{$bp\_2\downarrow$}
 \Etape{2}
-\ActionX{X2}{$Green\: Led\: ON$, $Tempo = Tempo + 5sec$}
+\ActionX{X2}{$Green\: Led\: ON$}
+\Action{X2}{$T_{fin} = time + 5sec$}
+\ActionActiv{X2}
+\Action{X2}{$T_{fin} = T_{fin} + 5sec$}
 \ActionCond{X2}{$bp\_2\downarrow$}
-\Transition{2}\Recept{T2}{$Tempo/X2$}
+\Transition{2}\Recept{T2}{$time > T_{fin}$}
 \LienRetour{T2}{X0}
 \end{tikzpicture}
 \end{figure}

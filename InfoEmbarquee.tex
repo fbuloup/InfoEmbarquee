@@ -110,6 +110,16 @@ captionpos=b
 
 
 \section{La carte XIAO SAMD21 et sa programmation}
+\subsection{Vue d'ensemble de la carte}
+\begin{frame}
+
+\center{\includegraphics[scale=0.25]{images/xiao-pinout.eps}}
+
+\textcolor{blue}{\textbf{\underline{\href{https://docs.arduino.cc/language-reference/}{Arduino language Ref.}}}}	
+
+
+
+\end{frame}
 \subsection{Le Main}
 \begin{frame}
 
@@ -133,14 +143,19 @@ captionpos=b
 
 \subsection{Les entrées/sorties numériques}
 \begin{frame}
+\center{\includegraphics[scale=0.2]{images/digitalwrite.eps}}
+\end{frame}
 
-
+\begin{frame}
+\center{\includegraphics[scale=0.2]{images/digitalRead.eps}}
 \end{frame}
 
 \subsection{Les entrées/sorties analogiques}
 \begin{frame}
-
-
+\center{\includegraphics[scale=0.2]{images/analogWrite.eps}}
+\end{frame}
+\begin{frame}
+\center{\includegraphics[scale=0.2]{images/analogRead.eps}}
 \end{frame}
 
 \subsection{Système temps réel}
@@ -149,23 +164,23 @@ captionpos=b
 
 \end{frame}
 
-\subsection{Exemple d'implémentation d'un GRAFCET}
-
-\begin{frame}
-\centering
-\begin{tikzpicture}
-\EtapeInitTransition[0,0]{0}{}{$Rec_0$}
-\EtapeTransition{1}{$Task_1$}{$Rec_1$}
-\EtapeTransition{2}{$Task_{2a}$,$Task_{2b}$}{$Rec_2$}
-\EtapeTransition{3}{$Task_3$}{$Rec_3$}
-\LienRetour{T3}{X0}
-\end{tikzpicture}
-\end{frame}
+\section{Exemples d'implémentation d'un GRAFCET}
+\subsection{Exemple général}
 
 \begin{frame}
 \begin{figure}
    \includegraphics[width=0.4\textwidth]{images/grafcet.eps}
    \includegraphics[width=0.575\textwidth]{images/CCode.eps}
+\end{figure}
+\end{frame}
+
+\subsection{Application TP1}
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.4\textwidth]{images/Grafcet_Prog8_1.eps}
+   \vspace{.5cm}
+   
+   \includegraphics[width=0.575\textwidth]{images/Grafcet_Prog8_2.eps}
 \end{figure}
 \end{frame}
 
