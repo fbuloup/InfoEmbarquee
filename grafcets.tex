@@ -1,0 +1,49 @@
+% Source - https://tex.stackexchange.com/a/8646
+% Posted by Caramdir, modified by community. See post 'Timeline' for change history
+% Retrieved 2026-02-03, License - CC BY-SA 3.0
+
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{grafcet}
+
+\begin{document}
+
+\begin{figure}
+\begin{tikzpicture}
+\EtapeInitTransition[0,0]{0}{}{$Rec_0$}
+\EtapeTransition{1}{$Task_1$}{$Rec_1$}
+\EtapeTransition{2}{$Task_{2a}$,$Task_{2b}$}{$Rec_2$}
+\EtapeTransition{3}{$Task_3$}{$Rec_3$}
+\LienRetour{T3}{X0}
+\end{tikzpicture}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+\EtapeInitTransition[0,0]{10}{}{$\underline{1}$}
+\EtapeTransition{11}{$Red\: Led\: OFF$}{$bp\_1\downarrow$}
+\Etape{12}
+\ActionX{X12}{$Red\: Led\: ON$}
+\Action{X12}{$T_{end} = time + 5sec$}
+\ActionActiv{X12}
+\Transition{12}\Recept{T2}{$time > T_{end}+bp\_1\downarrow$}
+\LienRetour{T12}{X10}
+\end{tikzpicture}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+\EtapeInitTransition[0,0]{20}{}{$\underline{1}$}
+\EtapeTransition{21}{$Green\: Led\: OFF$}{$bp\_2\downarrow$}
+\Etape{22}
+\ActionX{X22}{$Green\: Led\: ON$}
+\Action{X22}{$T_{end} = time + 5sec$}
+\ActionActiv{X22}
+\Action{X22}{$T_{end} = T_{end} + 5sec$}
+\ActionCond{X22}{$bp\_2\downarrow$}
+\Transition{22}\Recept{T2}{$time > T_{end}$}
+\LienRetour{T22}{X20}
+\end{tikzpicture}
+\end{figure}
+
+\end{document}

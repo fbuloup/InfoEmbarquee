@@ -1,0 +1,412 @@
+\documentclass[a4paper,11pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{caption}
+\usepackage{subcaption}
+% Thème Darmstadt
+\usetheme{Darmstadt}
+\usepackage{graphicx}
+\usepackage{ragged2e}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{libs/gitdags}
+\usepackage{fontawesome, wasysym}
+\usepackage{tikz}
+\usepackage{grafcet}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\captionsetup[figure]{labelformat=empty}
+
+\setbeamertemplate{navigation symbols}{} 
+\setbeamertemplate{footline} 
+{  
+	\begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+      leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+      {\usebeamerfont{title in head/foot}\insertshorttitle} \hfill    
+      \insertframenumber / \inserttotalframenumber%
+    \end{beamercolorbox}%
+%     \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
+%     \end{beamercolorbox} 
+}
+
+% Informations sur la présentation
+\title{Travaux pratiques Informatique Embarquée}
+\author{} 
+\institute{Université de Toulon\\IUT GEII Première année}
+\date{}
+
+\newcounter{exampleBlockCounter}
+\setcounter{exampleBlockCounter}{1} 
+
+\definecolor{comment}{rgb}{0.12, 0.38, 0.18 } %adjusted, in Eclipse: {0.25, 0.42, 0.30 } = #3F6A4D
+\definecolor{keyword}{rgb}{0.37, 0.08, 0.25}  % #5F1441
+\definecolor{string}{rgb}{0.06, 0.10, 0.98} % 
+
+\lstset{
+language=C,
+frame=single,
+frameround=tttt,
+rulesepcolor=\color{black},
+showspaces=false,showtabs=false,tabsize=2,
+numberstyle=\tiny,numbers=left,
+stringstyle=\color{string},
+keywordstyle = \color{keyword}\bfseries,
+commentstyle=\color{comment}\itshape,
+basicstyle=\ttfamily\footnotesize,
+breaklines=true,
+captionpos=b
+}
+
+%\includeonlyframes{current}
+
+\begin{document}
+
+% Première diapositive : Titre
+\begin{frame}[plain]
+    \titlepage
+    \center{\includegraphics[scale=0.75]{images/by-nc-sa.eps}}
+	\vspace{1.2cm}
+	\center{\includegraphics[scale=0.111]{images/logo-utln.eps} \hspace{1cm}
+	\includegraphics[scale=0.0825]{images/logogeii.eps}}
+    
+\end{frame}
+
+\begin{frame}{TPs Informatique Embarquée}
+	\tableofcontents[hideallsubsections]
+\end{frame}
+
+\AtBeginSection{%
+    \begin{frame}
+        \tableofcontents[sections=\value{section}]
+    \end{frame}
+}
+
+\section{Organisation}
+\begin{frame}
+\begin{block}{Séances de TPs - Groupe E - 2025/2026}
+	\begin{itemize}
+		\item Mardi aprèm
+		\item 9 de 3h (13h30-16h30) et 2 de 1h30 (13h30-15h)
+		\item Travail en monômes
+		\item Vous pouvez vous aider et demander de l'aide !
+	\end{itemize}
+\end{block}
+
+\begin{alertblock}{Il y a des règles durant ces séances !}
+	\begin{itemize}
+		\item Si pas de carte alors pas de TP !
+		\item Pas de téléphone : éteint dans le sac
+		\item Pas d'IA durant les séances
+		\item Lors de l'évaluation, vous n'aurez pas accès aux outils d'IA
+	\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+
+\section{Le XIAO SAMD21 et la carte SmartLight}
+\subsection{Le XIAO SAMD21}
+
+\begin{frame}
+
+\center{\includegraphics[scale=0.4]{images/xiao-pinout.jpg}}
+\vspace{0.05cm}
+
+\justifying
+\scriptsize
+\textbf{A0..A10} : Entrées analogiques\\
+\vspace{0.1cm}
+\textbf{D0..D10} : Entrées ou sorties numériques\\
+\vspace{0.1cm}
+\textbf{DAC} : Sortie analogique\\
+\vspace{0.1cm}
+Bus série :
+\begin{itemize}
+	\item \textbf{I\textsuperscript{2}C} (Inter-Integrated Circuit - \textbf{SDA} et \textbf{SCL})
+	\item \textbf{UART} (Universal Asynchronous Receiver Transmitter - \textbf{TX} et \textbf{RX})
+	\item \textbf{SPI} (Serial Peripheral Interface - \textbf{MOSI}, \textbf{MISO} et \textbf{SCK})
+\end{itemize}
+\vspace{0.1cm}
+\textbf{QTouch} : Capacitive Touch Sensor - Peripheral Touch Controller (PTC)
+\end{frame}
+
+\begin{frame}
+
+\center{\includegraphics[scale=0.4]{images/xiao-pinout.jpg}}
+\vspace{0.25cm}
+
+\begin{alertblock}{Conclusion : Entrée-Sortie à usage général}
+	\begin{itemize}
+		\item Une même broche de la puce peut avoir différentes fonctions
+		\item Jamais plus d'une fonction au même moment !
+		\item General Purpose Input Output (GPIO)
+	\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\subsection{La carte SMARTLIGHT}
+\begin{frame}
+\setbeamertemplate{frametitle}{}
+\includegraphics[scale=0.38]{images/CarteGEII.png}
+\end{frame}
+
+\subsection{La carte SMARTLIGHT - Déclaration de broches}
+\begin{frame}[fragile]
+\setbeamertemplate{frametitle}{}
+\centering
+\includegraphics[scale=0.6]{images/CarteGEII2.png}
+\begin{lstlisting}[language={[ansi]C},title=Exemples de déclaration de broches - Sorties numériques]
+#define LED_D5_PIN D10// Et non #define LED_D5_PIN D5 !
+#define LED_RED_PIN D6// Et non #define LED_RED_PIN TX !
+#define LED_D7_PIN D8 // ...    
+#define LED_GREEN_PIN D7  
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\setbeamertemplate{frametitle}{}
+\centering
+\includegraphics[scale=0.7]{images/CarteGEII3.png}
+\begin{lstlisting}[language={[ansi]C},title=Exemples de déclaration de broches - Entrées numériques]
+#define BP1_PIN D2
+#define BP2_PIN D3
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\setbeamertemplate{frametitle}{}
+\centering
+\includegraphics[scale=0.6]{images/CarteGEII4.png}
+\vspace{1cm}
+\begin{lstlisting}[language={[ansi]C},title=Exemples de déclaration de broches - Entrée analogique]
+#define LIGHT1_PIN A0
+\end{lstlisting}
+\end{frame}
+
+\subsection{Programmation - Le Main}
+\begin{frame}
+
+\center{\includegraphics[scale=0.55]{images/Main.PNG}}
+
+\end{frame}
+
+\begin{frame}
+
+\begin{alertblock}{La fonction \textbf{loop()}}
+	\begin{itemize}
+		\item Le nom \textbf{loop()} est mal choisi !
+		\item C'est un "faux ami"
+		\item C'est une fonction pas une boucle !
+		\item Mais cette fonction est bien appelée dans une boucle \textbf{for(;;)}
+		\item Et cette boucle n'a pas de fin d'exécution : boucle infinie !
+	\end{itemize}
+\end{alertblock}
+\vspace{1cm}
+\centering
+\textcolor{blue}{\textbf{\underline{\href{https://docs.arduino.cc/language-reference/}{Lien Arduino language Reference}}}}	
+\end{frame}
+
+\subsection{Programmation - Les entrées/sorties numériques}
+\begin{frame}
+\center{\includegraphics[scale=0.2]{images/digitalwrite.eps}}
+\end{frame}
+
+\begin{frame}
+\center{\includegraphics[scale=0.2]{images/digitalRead.eps}}
+\end{frame}
+
+\subsection{Programmation - Les entrées/sorties analogiques}
+\begin{frame}
+\center{\includegraphics[scale=0.2]{images/analogWrite.png}}
+\end{frame}
+\begin{frame}
+\center{\includegraphics[scale=0.2]{images/analogRead.png}}
+\end{frame}
+
+\subsection{Programmation - La fonction millis()}
+\begin{frame}
+\center{\includegraphics[scale=0.4]{images/millis.png}}
+\end{frame}
+
+\subsection{Programmation - Système temps réel}
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.9\textwidth]{images/systemetpsreel.png}
+\end{figure}
+
+\end{frame}
+
+\section{Travaux pratiques}
+\subsection{Bonnes pratiques de programmation 1 : la casse chameau !}
+\begin{frame}[fragile]
+\setbeamertemplate{frametitle}{}
+\centering
+\textcolor{blue}{\textbf{\underline{\href{https://fr.wikipedia.org/wiki/Camel_case}{Lien Wikipedia}}}}
+
+\includegraphics[width=0.5\textwidth]{images/camelCase.png}
+
+\begin{lstlisting}[language={[ansi]C},title=Exemples de notation en casse chameau : variables et fonctions]
+#define LIGHT1_PIN A0 // Constantes tjrs en majuscules
+int redLed, bp1, lastBp1;
+void unNomDeFonction(int paramNum1, char paramNum2) {
+    //...
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Bonnes pratiques de programmation 2 : ne vous répétez pas !}
+\begin{frame}[fragile]
+\begin{lstlisting}[language={[ansi]C},title=Exemple de répétition : il faut factoriser le code de clignotement]
+// ...
+void loop() {
+  // ...
+  blinkRedLed();
+  blinkBlueLed();
+  // ...
+}
+void blinkRedLed() {
+  compute = time % T_LED_RED;
+  if(compute < T_LED_RED/2) digitalWrite(LED_RED_PIN, HIGH);
+  else digitalWrite(LED_RED_PIN, LOW);
+}
+void blinkBlueLed() {
+  compute = time % T_LED_BLUE;
+  if(compute < T_LED_BLUE/2) digitalWrite(LED_BLUE_PIN, HIGH);
+  else digitalWrite(LED_BLUE_PIN, LOW);
+}
+\end{lstlisting}
+\end{frame}
+\begin{frame}[fragile]
+\begin{lstlisting}[language={[ansi]C},title=Exemple de répétition : factorisation effectuée]
+// ...
+void loop() {
+  // ...
+  blinkLed(LED_RED_PIN, T_LED_RED);
+  blinkLed(LED_BLUE_PIN, T_LED_BLUE);
+  // ...
+}
+void blinkLed(int ledPin, int period) {
+  compute = time % period;
+  if(compute < period/2) digitalWrite(ledPin, HIGH);
+  else digitalWrite(ledPin, LOW);
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Le problème des boutons poussoirs}
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.7\textwidth]{images/switch-bounce-principle.jpg}
+\end{figure}
+
+\centering
+\textbf{\textcolor{red}{
+Suivant le montage électrique : pull-up ou pull-down\\
+pull-up -> résistance de rappel à l'état haut\\
+pull-down -> résistance de rappel à l'état bas\\
+Le montage est en rappel à l'état haut sur la carte
+}}
+\end{frame}
+
+\begin{frame}{Appuie sur le bouton poussoir}
+\begin{figure}
+   \includegraphics[width=0.45\textwidth]{images/TEK0001.png}
+\end{figure}
+\begin{alertblock}{Mise en contact des lames métalliques :}
+	\begin{itemize}
+		\item Le doigt plaque et maintient les lames métalliques en contact 
+		\item D'un point de vue mécanique, il n'y a pas de rebonds...
+		\item ... ou en dessous du niveau logique haut
+	\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Relâchement du bouton poussoir}
+\begin{figure}
+   \includegraphics[width=0.45\textwidth]{images/TEK0000.png}
+\end{figure}
+\begin{alertblock}{Déconnexion des lames métalliques :}
+	\begin{itemize}
+		\item Le doigt libère une des lames métalliques
+		\item D'un point de vue mécanique, les rebonds sont très probables
+		\item Niveau logique bas retrouvé lors des rebonds
+	\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\subsection{Détection de front sur signal numérique}
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.8\textwidth]{images/TEK0001A.png}
+\end{figure}
+\centering
+Le test \textbf{(bp1 == LOW \&\& lastBp1 == HIGH)} est faux
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.8\textwidth]{images/TEK0001B.png}
+\end{figure}
+\centering
+Le test \textbf{(bp1 == LOW \&\& lastBp1 == HIGH)} est vrai
+\end{frame}
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.8\textwidth]{images/TEK0001C.png}
+\end{figure}
+\centering
+Le test \textbf{(bp1 == LOW \&\& lastBp1 == HIGH)} est faux
+\end{frame}
+\begin{frame}[fragile]
+\begin{lstlisting}[language={[ansi]C},title=Détection de front descendant]
+bp1 = digitalRead(BP1_PIN);
+if(bp1 == LOW && lastBp1 == HIGH) {
+    //...   
+}
+lastBp1 = bp1;
+\end{lstlisting}
+\begin{lstlisting}[language={[ansi]C},title=Détection de front descendant avec suppression des rebonds]
+if(time - lastBp1Time > 30) { // Echant. tous les 30ms
+    bp1 = digitalRead(BP1_PIN);
+    if(bp1 == LOW && lastBp1 == HIGH) {
+        //...
+    }
+    lastBp1 = bp1;
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Exemples de GRAFCET}
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.4\textwidth]{images/grafcet.eps}
+   \includegraphics[width=0.575\textwidth]{images/CCode.png}
+   \caption{Exemple général}
+\end{figure}
+
+\end{frame}
+
+%\subsection{Application TP1}
+\begin{frame}
+\begin{figure}
+   \includegraphics[width=0.7\textwidth]{images/Grafcet_Prog8_1.png}
+	\caption{Prog. 12 - Minuterie arrêt immédiat}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{figure}   
+   \includegraphics[width=0.9\textwidth]{images/Grafcet_Prog8_2.png}
+	\caption{Prog. 12 - Minuterie réarmable}
+\end{figure}
+\end{frame}
+
+
+
+
+\end{document}
+
+
+
+
+
