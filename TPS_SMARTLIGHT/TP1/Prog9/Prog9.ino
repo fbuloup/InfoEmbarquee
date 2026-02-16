@@ -1,25 +1,28 @@
-// TP1 - PROG8
+// TP1 - PROG9
 
 #define LED_D5_PIN D10
-#define LED_BLUE_PIN D9
+#define LED_D7_PIN D8
 #define T_LED_D5 2000
 #define BP1_PIN D2
-#define BP2_PIN D3
 #define T_BP 30 // 30ms
 
-unsigned long time, t0, tLedBlue;
+#define STATE_0 0
+#define STATE_1 1
+#define STATE_2 2
+
+unsigned long time, t0;
 long previousTime;
-int bp1, bp2, lastBp1, lastBp2;
+int bp1, counter;
+
+byte currentState;
   
 void setup() {
   pinMode(LED_D5_PIN, OUTPUT);
-  pinMode(LED_BLUE_PIN, OUTPUT);
+  pinMode(LED_D7_PIN, OUTPUT);
   pinMode(BP1_PIN, INPUT);
-  pinMode(BP2_PIN, INPUT);
-  lastBp1 = 1;
-  lastBp2 = 1;
   previousTime = -T_BP;
-  tLedBlue = 800;
+  counter = 0;
+  currentState = STATE_0;
   Serial.begin(9600);
   t0 = millis();
 }
@@ -30,23 +33,19 @@ void loop() {
   // Acquisition boutons ssi dt >= T_BP
   if(time - previousTime >= T_BP) { 
     bp1 = digitalRead(BP1_PIN);
-    bp2 = digitalRead(BP2_PIN);
-    if(bp1 == 0 && lastBp1 == 1) { // Falling edge
-      tLedBlue+=50;
-      if(tLedBlue > 2000) tLedBlue = 2000;
-      Serial.println(tLedBlue);
+    if(bp1 == 0 && currentState == STATE_0) currentState = STATE_1;
+    else if(currentState == STATE_1) currentState = STATE_2;
+    else if(bp1 == 1 && currentState == STATE_2) currentState = STATE_0;
+    if(currentState == STATE_0) {
+      digitalWrite(LED_D7_PIN, LOW);
     }
-    if(bp2 == 0 && lastBp2 == 1) { // Falling edge
-      tLedBlue-=50;
-      if(tLedBlue < 200) tLedBlue = 200;
-      Serial.println(tLedBlue);
+    if(currentState == STATE_1) { 
+      counter++;
+      digitalWrite(LED_D7_PIN, HIGH);
+      Serial.println(counter);
     }
-    lastBp1 = bp1;
-    lastBp2 = bp2;
-    previousTime = time; 
-  } 
-   
-  blinkLed(LED_BLUE_PIN, tLedBlue );
+     previousTime = time; 
+   } 
 
   // Led de vie
   blinkLed(LED_D5_PIN, T_LED_D5);

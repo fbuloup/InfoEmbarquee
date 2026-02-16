@@ -1,25 +1,20 @@
 // TP1 - PROG7
 
 #define LED_D5_PIN D10
-#define LED_BLUE_PIN D9
 #define T_LED_D5 2000
 #define BP1_PIN D2
-#define BP2_PIN D3
-#define T_BP 30 // 30ms
+#define T_BP1 30 // 30ms - Mettre en commentaire pour rebonds
 
-unsigned long time, t0, tLedBlue;
-long previousTime;
-int bp1, bp2, lastBp1, lastBp2;
+unsigned long time, t0, bp1Counter;
+long previousTime; // Mettre en commentaire pour rebonds
+int bp1, lastBp1;
   
 void setup() {
   pinMode(LED_D5_PIN, OUTPUT);
-  pinMode(LED_BLUE_PIN, OUTPUT);
   pinMode(BP1_PIN, INPUT);
-  pinMode(BP2_PIN, INPUT);
+  bp1Counter = 0;
   lastBp1 = 1;
-  lastBp2 = 1;
-  previousTime = -T_BP;
-  tLedBlue = 800;
+  previousTime = -T_BP1; // Mettre en commentaire pour rebonds
   Serial.begin(9600);
   t0 = millis();
 }
@@ -27,34 +22,24 @@ void setup() {
 void loop() {
   time = millis() - t0;
 
-  // Acquisition boutons ssi dt >= T_BP
-  if(time - previousTime >= T_BP) { 
+  // Acquisition ssi dt >= T_BP1
+  if(time - previousTime >= T_BP1) { // Mettre en commentaire pour rebonds
     bp1 = digitalRead(BP1_PIN);
-    bp2 = digitalRead(BP2_PIN);
-    if(bp1 == 0 && lastBp1 == 1) { // Falling edge
-      tLedBlue+=50;
-      if(tLedBlue > 2000) tLedBlue = 2000;
-      Serial.println(tLedBlue);
-    }
-    if(bp2 == 0 && lastBp2 == 1) { // Falling edge
-      tLedBlue-=50;
-      if(tLedBlue < 200) tLedBlue = 200;
-      Serial.println(tLedBlue);
+    if(bp1 == 0 && lastBp1 == 1) { // Falling edge (front descendant)
+      bp1Counter++;
+      Serial.println(bp1Counter);
     }
     lastBp1 = bp1;
-    lastBp2 = bp2;
-    previousTime = time; 
-  } 
-   
-  blinkLed(LED_BLUE_PIN, tLedBlue );
+    previousTime = time;
+  } // Mettre en commentaire pour rebonds
 
   // Led de vie
-  blinkLed(LED_D5_PIN, T_LED_D5);
+  blinkLed();
 }
 
-void blinkLed(byte ledPin, unsigned int tLed) {
+void blinkLed() {
   static unsigned int compute;
-  compute = time % tLed; // Reste de la division entière
-  if(compute < tLed/2) digitalWrite(ledPin, HIGH);
-  else digitalWrite(ledPin, LOW);
+  compute = time % T_LED_D5; // Reste de la division entière
+  if(compute < T_LED_D5/2) digitalWrite(LED_D5_PIN, HIGH);
+  else digitalWrite(LED_D5_PIN, LOW);
 }
