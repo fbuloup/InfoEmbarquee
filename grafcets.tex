@@ -21,12 +21,12 @@
 \begin{figure}
 \begin{tikzpicture}
 \EtapeInitTransition[0,0]{10}{}{$\underline{1}$}
-\EtapeTransition{11}{$Red\: Led\: OFF$}{$bp\_1\downarrow$}
+\EtapeTransition{11}{$Red\: Led\: OFF$}{$bp1\downarrow$}
 \Etape{12}
 \ActionX{X12}{$Red\: Led\: ON$}
 \Action{X12}{$T_{end} = time + 5sec$}
 \ActionActiv{X12}
-\Transition{12}\Recept{T2}{$time > T_{end}+bp\_1\downarrow$}
+\Transition{12}\Recept{T2}{$time > T_{end}+bp1\downarrow$}
 \LienRetour{T12}{X10}
 \end{tikzpicture}
 \end{figure}
@@ -34,15 +34,30 @@
 \begin{figure}
 \begin{tikzpicture}
 \EtapeInitTransition[0,0]{20}{}{$\underline{1}$}
-\EtapeTransition{21}{$Green\: Led\: OFF$}{$bp\_2\downarrow$}
+\EtapeTransition{21}{$Green\: Led\: OFF$}{$bp2\downarrow$}
 \Etape{22}
 \ActionX{X22}{$Green\: Led\: ON$}
 \Action{X22}{$T_{end} = time + 5sec$}
 \ActionActiv{X22}
 \Action{X22}{$T_{end} = T_{end} + 5sec$}
-\ActionCond{X22}{$bp\_2\downarrow$}
+\ActionCond{X22}{$bp2\downarrow$}
 \Transition{22}\Recept{T2}{$time > T_{end}$}
 \LienRetour{T22}{X20}
+\end{tikzpicture}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+\EtapeTransition[0,0]{0}{$Eteindre\: Led$}{}
+\DivOU{X0}{0/L0a,11/L0b}
+\SequenceTT[L0a]{0a}{11,12}
+\SequenceTT[L0b]{0b}{21,22}
+\ConvOU[0]{T12}{T22}{L1}
+\DecaleNoeudy[-1.3]{L1}{L1}
+\ActionXV{X11}{$counter++$,$Allumer\: Led$}
+\ActionXV{X21}{$counter--$,$Allumer\: Led$}
+\Recepts{0a/$bp1==0$,0b/$bp2==0$,11/$\underline{1}$,21/$\underline{1}$,12/$bp1==1$,22/$bp2==1$}
+\LienRetour{L1}{X0}
 \end{tikzpicture}
 \end{figure}
 
