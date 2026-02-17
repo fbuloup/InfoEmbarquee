@@ -26,7 +26,7 @@
 \ActionX{X12}{$Red\: Led\: ON$}
 \Action{X12}{$T_{end} = time + 5sec$}
 \ActionActiv{X12}
-\Transition{12}\Recept{T2}{$time > T_{end}+bp1\downarrow$}
+\Transition{12}\Recept{T12}{$time > T_{end}+bp1\downarrow$}
 \LienRetour{T12}{X10}
 \end{tikzpicture}
 \end{figure}
@@ -41,7 +41,7 @@
 \ActionActiv{X22}
 \Action{X22}{$T_{end} = T_{end} + 5sec$}
 \ActionCond{X22}{$bp2\downarrow$}
-\Transition{22}\Recept{T2}{$time > T_{end}$}
+\Transition{22}\Recept{T22}{$time > T_{end}$}
 \LienRetour{T22}{X20}
 \end{tikzpicture}
 \end{figure}
@@ -58,6 +58,21 @@
 \ActionXV{X21}{$counter--$,$Allumer\: Led$}
 \Recepts{0a/$bp1==0$,0b/$bp2==0$,11/$\underline{1}$,21/$\underline{1}$,12/$bp1==1$,22/$bp2==1$}
 \LienRetour{L1}{X0}
+\end{tikzpicture}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+\EtapeTransition[0,0]{0}{}{$bp1==0$}
+\EtapeTransition{1}{Préchauf.,$timeEnd=time+4sec$}{$\underline{1}$}
+\EtapeTransition{2}{}{$time > timeEnd$}
+\EtapeTransition{3}{Rampe,$timeEnd=time+3sec$}{$\underline{1}$}
+\EtapeTransition{4}{}{$time > timeEnd$}
+\EtapeTransition{5}{Refusion,$timeEnd=time+2sec$}{$\underline{1}$}
+\EtapeTransition{6}{}{$time > timeEnd$}
+\EtapeTransition{7}{Refroidissement,$timeEnd=time+3sec$}{$\underline{1}$}
+\EtapeTransition{8}{}{$time > timeEnd$}
+\LienRetour{T8}{X0}
 \end{tikzpicture}
 \end{figure}
 

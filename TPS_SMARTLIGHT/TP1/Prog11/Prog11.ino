@@ -5,9 +5,7 @@
 
 #define LED_BLUE_PIN D9
 #define LED_GREEN_PIN D7
-#define LED_YELLOW_PIN D8
 #define LED_RED_PIN D6
-
 
 #define BP1_PIN D2
 #define T_BP 30 // 30ms
@@ -63,7 +61,6 @@ void loop() {
     else if(time > timeEnd && currentState == STATE_8) currentState = STATE_0; 
     if(currentState == STATE_0) {
       setRGB(OFF);
-      Serial.println("Arrêt");
     }
     if(currentState == STATE_1) { 
       timeEnd = time + 4000;      
@@ -100,28 +97,24 @@ void blinkLed(byte ledPin, unsigned int tLed) {
 }
 
 void setRGB(int ledColor) {
-  static int ledPin;
+  static unsigned int ledPin;
   digitalWrite(LED_GREEN_PIN, LOW);  
-  digitalWrite(LED_YELLOW_PIN, LOW);
   digitalWrite(LED_RED_PIN, LOW);
   digitalWrite(LED_BLUE_PIN, LOW);
-  if(ledPin == OFF) {    
-    Serial.println("return");
-    return;  
-  }  
-  Serial.println("digitalWrite");
+  if(ledColor == OFF) return;  
   switch (ledColor) {
     case GREEN:
-      ledPin == LED_GREEN_PIN;
+      ledPin = LED_GREEN_PIN;
       break;
     case YELLOW:
-      ledPin == LED_YELLOW_PIN;
+      digitalWrite(LED_RED_PIN, HIGH);
+      ledPin = LED_GREEN_PIN;
       break;
     case RED:
-      ledPin == LED_RED_PIN;
+      ledPin = LED_RED_PIN;
       break;
     case BLUE:
-      ledPin == LED_BLUE_PIN;
+      ledPin = LED_BLUE_PIN;
       break;
   }
   digitalWrite(ledPin, HIGH);
