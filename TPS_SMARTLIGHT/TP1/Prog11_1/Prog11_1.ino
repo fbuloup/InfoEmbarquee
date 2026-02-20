@@ -1,4 +1,4 @@
-// TP1 - PROG11
+// TP1 - PROG11_1
 
 #define LED_D5_PIN D10
 #define T_LED_D5 2000
@@ -8,6 +8,7 @@
 #define LED_RED_PIN D6
 
 #define BP1_PIN D2
+#define BP2_PIN D3
 #define T_BP 30 // 30ms
 
 #define STATE_0 0
@@ -28,7 +29,7 @@
 
 unsigned long time, t0, timeEnd;
 long previousTime;
-int bp1;
+int bp1, bp2;
 
 byte currentState;
   
@@ -38,6 +39,7 @@ void setup() {
   pinMode(LED_GREEN_PIN, OUTPUT);
   pinMode(LED_RED_PIN, OUTPUT);
   pinMode(BP1_PIN, INPUT);
+  pinMode(BP2_PIN, INPUT);
   previousTime = -T_BP;
   currentState = STATE_0;
   Serial.begin(9600);
@@ -50,9 +52,11 @@ void loop() {
   // Acquisition boutons ssi dt >= T_BP
   if(time - previousTime >= T_BP) { 
     bp1 = digitalRead(BP1_PIN);
+    bp2 = digitalRead(BP2_PIN);
     if(bp1 == 0 && currentState == STATE_0) currentState = STATE_1;
     else if(currentState == STATE_1) currentState = STATE_2;
-    else if(time > timeEnd && currentState == STATE_2) currentState = STATE_3;
+    else if(time > timeEnd && currentState == STATE_2) currentState = STATE_3;    
+    else if(bp2 == 0 && currentState == STATE_2) currentState = STATE_5;
     else if(currentState == STATE_3) currentState = STATE_4;
     else if(time > timeEnd && currentState == STATE_4) currentState = STATE_5;    
     else if(currentState == STATE_5) currentState = STATE_6;

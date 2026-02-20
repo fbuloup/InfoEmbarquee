@@ -99,8 +99,8 @@
 \begin{tikzpicture}
 \EtapeTransition[0,0]{10}{}{$bp2==0$}
 \ForcageXV{X10}{$GProg\_11\{0\}$}
-\EtapeTransition{11}{$stopLedVie=1$,$Red\: Led\: ON$}{$bp1==0+bp2==1$}
-\EtapeTransition{12}{$stopLedVie=0$,$Red\: Led\: OFF$}{$\underline{1}$}
+\EtapeTransition{11}{$stopLedVie=1$,$Red\: Led\: ON$}{$bp1==0\: \&\&\: bp2==1$}
+\EtapeTransition{12}{$stopLedVie=0$,$Red\: Led\: OFF$}{$bp1==1\: \&\&\: bp2==1$}
 \LienRetour{T12}{X10}
 \end{tikzpicture}
 \end{figure}
