@@ -105,5 +105,16 @@
 \end{tikzpicture}
 \end{figure}
 
+\begin{figure}
+\begin{tikzpicture}
+\EtapeTransition[0,0]{0}{}{$bp1==0$}
+\EtapeTransition{1}{$analogValue+=analogRead$,$nbAcquiredValues++$}{$nbAcquiredValues == nbValuesToAcquire$}
+\Etape{2}
+\ActionXV{X2}{$analogValue = analogValue/nbValuesToAcquire$,$nbAcquiredValues = 0$,$analogValue = 0$}
+\TransitionRecept[VX2]{X2}{$\underline{1}$}
+\LienRetour{TX2}{X0}
+\end{tikzpicture}
+\end{figure}
+
 
 \end{document}

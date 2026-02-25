@@ -1,7 +1,7 @@
 // TP2 - Prog 3
 #include "Adafruit_VEML7700.h"
 
-#define SAMPLE_PERIOD 500 // en ms
+#define SAMPLE_PERIOD 30 // en ms
 #define ANALOG_PIN A0
 const unsigned int N = 10; // Taille de la moyenne glissante
 
