@@ -77,22 +77,26 @@ float getPhotoTransistorLux() {
   // Vlight1 = R1*IPCE => IPCE = Vlight1/R1 
   // IPCE = Vlight1/51*10^(-3) A
   // IPCE = 1000/51*Vlight1 en uA (1)
-  // Pour 10 lux IPCE/IPCEmax = 0.01
-  // Pour 100 lux IPCE/IPCEmax = 0.1
+  // Pour 10 lux IPCE/IPCE(1000lx)) = 0.01
+  // Pour 100 lux IPCE/IPCE(1000lx) = 0.1
   // ...
-  // Pour 10000 lux IPCE/IPCEmax = 10
+  // Pour 10000 lux IPCE/IPCE(1000lx) = 10
   // ...
-  // Ev(lux) = 1000*IPCE/IPCEmax
+  // Ev(lux) = 1000*IPCE/IPCE(1000lx)
   // Avec (1) :
-  // Ev(lux) = 1000000/(51*IPCEmax)*Vlight1
-  // IPCEmax en uA. On prendra 24uA
+  // Ev(lux) = 1000000/(51*IPCE(1000lx))*Vlight1
+  // avec IPCE(1000lx) en uA. Si on prend 24uA
   // Ev(lux) = 1000000/(51*24)*3.3/1024*N
   // N étant le nombre donné par le CAN
   // Ev (lux) = 3300000/1253376*N
-  // Ev (lux) # 2.6328891*N
+  // Ev (lux) # 2.6328*N pour IPCE(1000lx) = 24uA
+  // Si on prend IPCE(1000lx) = 16uA on aura :
+  // Ev (lux) # 3.9493*N
+  // Et si on prend IPCE(1000lx) = 32uA on aura :
+  // Ev (lux) # 1.9746*N
   static unsigned int valueInt;
   static float value;
   valueInt = analogRead(ANALOG_PIN);
-  value = 2.6328891*valueInt;
+  value = 2.6328*valueInt;
   return value;
 }

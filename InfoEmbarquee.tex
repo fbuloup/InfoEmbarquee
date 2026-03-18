@@ -16,6 +16,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 %\captionsetup[figure]{labelformat=empty}
+\usepackage{systeme}
 
 \setbeamertemplate{navigation symbols}{} 
 \setbeamertemplate{footline} 
@@ -424,8 +425,70 @@ if(time - lastBp1Time > 30) { // Echant. tous les 30ms
 \end{figure}
 \end{frame}
 
-\subsection{TP2 - GRAFCET 4}
+\subsection{TP2 - La relation Ev = f(n)}
+\begin{frame}
+\justifying
+La relation qui donne la valeur de l'éclairement $Ev$ en lux en fonction du nombre n délivré par le CAN peut être déduite du graphe log/log $\frac{IP_{ce}}{IP_{ce}(1000lx)}$ en fonction de $Ev$  donné dans le TP numéro 2. Selon ce graphe il existe une relation affine entre ces deux grandeurs. On peut donc écrire :
+$$
+log\left( \frac{IP_{ce}}{IP_{ce}(1000lx)}\right) =a\cdot log(Ev) + b
+$$
+En prenant les deux points particuliers suivants :
+$\frac{IP_{ce}}{IP_{ce}(1000lx)}=10^{-1}$ pour $Ev=10^2$ et $\frac{IP_{ce}}{IP_{ce}(1000lx)}=10^{1}$ pour $Ev=10^4$, on peut obtenir le système d'équation suivant :
+$$
+\systeme{a\cdot 2+b=-1,a\cdot 4+b=1}
+$$
+et en déduire que $a=1$ et $b=-3$
+\end{frame}
 
+\begin{frame}
+\justifying
+En utilisant ces valeurs dans la première relation :
+$$
+log\left( \frac{IP_{ce}}{IP_{ce}(1000lx)}\right) =1\cdot log(Ev) -3 = log(Ev) + log(10^{-3})
+$$
+$$
+\Rightarrow log\left( \frac{IP_{ce}}{IP_{ce}(1000lx)}\right) = log\left( 10^{-3}\cdot Ev\right)
+$$
+Finalement :
+$$
+Ev = 10^{3}\cdot \frac{IP_{ce}}{IP_{ce}(1000lx)}
+$$
+Le courant qui sort du collecteur de $Q1$ est mesuré aux bornes de $R1$ : $V_{Light1} = R1\cdot IP_{ce}$. En remplaçant $IP_{ce}$ dans l'équation précédente on obtient :
+$$
+Ev = 10^{3}\cdot \frac{V_{Light1}}{R1\cdot IP_{ce}(1000lx)}
+$$
+\end{frame}
+\begin{frame}
+\justifying
+Comme $R1=51k\Omega=51\cdot 10^{3}$, la relation précédente devient :
+$$
+Ev = 10^{3}\cdot \frac{V_{Light1}}{51\cdot 10^{3}\cdot IP_{ce}(1000lx)}= \frac{V_{Light1}}{51\cdot IP_{ce}(1000lx)}
+$$
+La tension aux bornes de $R1$ peut être exprimée en fonction du nombre $n$ délivré par le CAN :
+$$
+V_{Light1}=\frac{3,3}{1024}\cdot n
+$$
+Au final :
+$$
+Ev = \frac{3,3}{1024\cdot 51\cdot IP_{ce}(1000lx)}\cdot n
+$$
+Si on exprime $IP_{ce}(1000lx)$ en $\mu A$ :
+$$
+Ev = \frac{3,3*10^6}{1024\cdot 51\cdot IP_{ce}(1000lx)}\cdot  n \simeq \frac{63,189}{IP_{ce}(1000lx)(\mu A)} \cdot n
+$$
+\end{frame}
+\begin{frame}
+\justifying
+Pour différentes valeurs de $IP_{ce}(1000lx)(\mu A)$, La relation devient :
+\begin{align*}
+Ev &\simeq \frac{63,1893}{16}\cdot n\simeq 3,9493\cdot n\\
+Ev &\simeq \frac{63,1893}{24}\cdot n\simeq 2,6328\cdot n\\
+Ev &\simeq \frac{63,1893}{32}\cdot n\simeq 1,9746\cdot n
+\end{align*}
+Que l'on peut utiliser telle quelle dans le code pour le XIAO SAMD21.
+\end{frame}
+
+\subsection{TP2 - GRAFCET 4}
 \begin{frame}
 \begin{figure}   
    \includegraphics[width=0.9\textwidth]{images/Grafcet_TP2_Prog4.png}
