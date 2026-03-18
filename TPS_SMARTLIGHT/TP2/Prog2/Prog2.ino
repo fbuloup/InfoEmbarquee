@@ -48,10 +48,14 @@ float getPhotoTransistorLux() {
   // Ev(lux) = 1000000/(51*24)*3.3/1024*N
   // N étant le nombre donné par le CAN
   // Ev (lux) = 3300000/1253376*N
-  // Ev (lux) # 2.6328891*N
+  // Ev (lux) # 2.6328891*N pour IPCEmax = 24uA
+  // Si on prend IPCEmax = 16uA on aura :
+  // Ev (lux) # 3.94933*N
+  // Et si on prend IPCEmax = 32uA on aura :
+  // Ev (lux) # 1.9746*N
   static unsigned int valueInt;
   static float value;
   valueInt = analogRead(ANALOG_PIN);
-  value = 2.6328891*valueInt;
+  value = 2.6329*valueInt;
   return value;
 }
