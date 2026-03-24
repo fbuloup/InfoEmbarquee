@@ -3,7 +3,6 @@
 #define SAMPLE_PERIOD 500 // en ms
 #define ANALOG_PIN A9
 
-bool firstLoop;
 unsigned int sensorValueInt;
 float sensorValueVolt;
 
