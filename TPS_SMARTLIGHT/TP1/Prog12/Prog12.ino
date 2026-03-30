@@ -19,7 +19,7 @@
 
 #define DT 5000 
 
-unsigned long time, t0, previousTimeBp1, previousTimeBp2, timeEnteringState12, timeEnteringState22, timeEnd2;
+long time, t0, previousTimeBp1, previousTimeBp2, timeEnteringState12, timeEnteringState22, timeEnd2;
 bool bp1Pushed, bp2Pushed, enteringState12, enteringState22, end1, end2;
 int bp1, bp2, lastBp1, lastBp2;
 
