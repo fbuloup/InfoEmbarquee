@@ -27,7 +27,7 @@
 #define RED 3
 #define BLUE 4
 
-unsigned long time, t0, timeEnd;
+unsigned long time, timeEnd;
 long previousTime;
 int bp1, bp2;
 
@@ -43,11 +43,10 @@ void setup() {
   previousTime = -T_BP;
   currentState = STATE_0;
   Serial.begin(9600);
-  t0 = millis();
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   // Acquisition boutons ssi dt >= T_BP
   if(time - previousTime >= T_BP) { 
