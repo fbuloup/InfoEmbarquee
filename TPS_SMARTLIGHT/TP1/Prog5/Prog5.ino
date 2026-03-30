@@ -5,18 +5,17 @@
 #define BP1_PIN D2
 #define T_LED 2000
 
-unsigned long time, t0;
+unsigned long time;
 int bp1;
   
 void setup() {
   pinMode(LED_D5_PIN, OUTPUT);
   pinMode(LED_RED_PIN, OUTPUT);
   pinMode(BP1_PIN, INPUT);
-  t0 = millis();
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
   
   bp1 = digitalRead(BP1_PIN);
   digitalWrite(LED_RED_PIN, bp1?LOW:HIGH);
