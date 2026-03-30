@@ -19,7 +19,7 @@
 
 #define DT 5000 
 
-long time, t0, previousTimeBp1, previousTimeBp2, timeEnteringState12, timeEnteringState22, timeEnd2;
+long time, previousTimeBp1, previousTimeBp2, timeEnteringState12, timeEnteringState22, timeEnd2;
 bool bp1Pushed, bp2Pushed, enteringState12, enteringState22, end1, end2;
 int bp1, bp2, lastBp1, lastBp2;
 
@@ -36,11 +36,10 @@ void setup() {
   lastBp2 = 1;
   previousTimeBp1 = -T_BP;
   previousTimeBp2 = -T_BP;
-  t0 = millis();
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
   // Acquisition bouton 1 front montant
   bp1Pushed = false;
   if(time - previousTimeBp1 >= T_BP) {
