@@ -138,13 +138,13 @@
 \begin{tikzpicture}
 \EtapeInitTransition[0,0]{0}{}{$bp1\downarrow$}
 \Etape{1}
-\Actions{1/Lire entrée analog. 0 dans $V_{analog}$}
+\Actions{1/Lire entrée analog. 9 dans $analogValue$}
 \DivOU{X1}{-9/L021,9/L022}
 \Transition[L021]{c}
-\Recepts{c/$V_{analog}<1.65$}
+\Recepts{c/$analogValue<1.65$}
 \EtapeTransition{21}{Allumer Led rouge}{$\underline{1}$}
 \Transition[L022]{d}
-\Recepts{d/$V_{analog}\ge 1.65$}
+\Recepts{d/$analogValue\ge 1.65$}
 \EtapeTransition{22}{Allumer Led verte}{$\underline{1}$}
 \ConvOU[9]{T21}{T22}{L0}
 \DecaleNoeudy[-1.3]{L0}{L0}
