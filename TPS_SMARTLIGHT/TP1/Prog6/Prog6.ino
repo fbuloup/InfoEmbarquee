@@ -14,7 +14,6 @@ void setup() {
   pinMode(LED_RED_PIN, OUTPUT);
   pinMode(BP1_PIN, INPUT);
   pinMode(BP2_PIN, INPUT);
-  t0 = millis();
 }
 
 void loop() {
