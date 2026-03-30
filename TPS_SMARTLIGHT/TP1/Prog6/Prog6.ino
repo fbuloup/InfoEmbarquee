@@ -6,7 +6,7 @@
 #define BP1_PIN D2
 #define BP2_PIN D3
 
-unsigned long time, t0;
+unsigned long time;
 int bp1, bp2;
   
 void setup() {
@@ -18,7 +18,7 @@ void setup() {
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   bp1 = digitalRead(BP1_PIN);
   bp2 = digitalRead(BP2_PIN);
