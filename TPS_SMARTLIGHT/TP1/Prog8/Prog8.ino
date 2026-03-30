@@ -7,7 +7,7 @@
 #define BP2_PIN D3
 #define T_BP 30 // 30ms
 
-unsigned long time, t0, tLedBlue;
+unsigned long time, tLedBlue;
 long previousTime;
 int bp1, bp2, lastBp1, lastBp2;
   
@@ -21,11 +21,10 @@ void setup() {
   previousTime = -T_BP;
   tLedBlue = 800;
   Serial.begin(9600);
-  t0 = millis();
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   // Acquisition boutons ssi dt >= T_BP
   if(time - previousTime >= T_BP) { 
