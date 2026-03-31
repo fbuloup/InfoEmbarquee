@@ -7,7 +7,8 @@ const unsigned int N = 10; // Taille de la moyenne glissante
 
 float sensorValueLux;
 
-unsigned long time, t0, previousTime;
+unsigned long time;
+long previousTime;
 
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
 
@@ -27,12 +28,10 @@ void setup() {
   veml.interruptEnable(true);
 
   previousTime = -SAMPLE_PERIOD;
-  t0 = millis();
-  time = 0;
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   if(time - previousTime >= SAMPLE_PERIOD) {
     sensorValueLux = getPhotoTransistorLux();

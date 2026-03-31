@@ -3,15 +3,14 @@
 #define LED_D5_PIN D10
 #define T_LED_D5 2000
 
-unsigned long time, t0;
+unsigned long time;
   
 void setup() {
   pinMode(LED_D5_PIN, OUTPUT);
-  t0 = millis();
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
   // Led de vie
   blinkLed();
 }

@@ -5,7 +5,8 @@
 
 float sensorValueLux;
 
-unsigned long time, t0, previousTime;
+unsigned long time;
+long previousTime;
 
 void setup() {
   //analogReference(AR_INTERNAL1V0);
@@ -13,12 +14,10 @@ void setup() {
   analogReadResolution(10);
   Serial.begin(9600);
   previousTime = -SAMPLE_PERIOD;
-  t0 = millis();
-  time = 0;
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   if(time - previousTime >= SAMPLE_PERIOD) {
     sensorValueLux = getPhotoTransistorLux();

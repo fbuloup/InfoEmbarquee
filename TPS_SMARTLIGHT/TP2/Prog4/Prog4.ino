@@ -12,7 +12,8 @@ const byte nbValuesToAcquire = 10;
 
 float analogValue;
 
-unsigned long time, t0, previousTime, nbValues;
+unsigned long time, nbValues;
+long previousTime;
 
 byte bp1, previousBp1, state, nbAcquiredValues;
 
@@ -32,12 +33,10 @@ void setup() {
   analogValue = 0;
 
   previousTime = -SAMPLE_PERIOD;
-  t0 = millis();
-  time = 0;
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   if(time - previousTime >= SAMPLE_PERIOD) {
 

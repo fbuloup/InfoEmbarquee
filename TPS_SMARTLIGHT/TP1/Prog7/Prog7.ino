@@ -5,7 +5,7 @@
 #define BP1_PIN D2
 #define T_BP1 30 // 30ms - Mettre en commentaire pour rebonds
 
-unsigned long time, t0, bp1Counter;
+long time, bp1Counter;
 long previousTime; // Mettre en commentaire pour rebonds
 int bp1, lastBp1;
   
@@ -16,11 +16,10 @@ void setup() {
   lastBp1 = 1;
   previousTime = -T_BP1; // Mettre en commentaire pour rebonds
   Serial.begin(9600);
-  t0 = millis();
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   // Acquisition ssi dt >= T_BP1
   if(time - previousTime >= T_BP1) { // Mettre en commentaire pour rebonds

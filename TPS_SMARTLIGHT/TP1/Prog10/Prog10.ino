@@ -13,7 +13,7 @@
 #define STATE_21 21
 #define STATE_22 22
 
-unsigned long time, t0;
+unsigned long time;
 long previousTime;
 int bp1, bp2, counter;
 
@@ -28,11 +28,10 @@ void setup() {
   counter = 0;
   currentState = STATE_0;
   Serial.begin(9600);
-  t0 = millis();
 }
 
 void loop() {
-  time = millis() - t0;
+  time = millis();
 
   // Acquisition boutons ssi dt >= T_BP
   if(time - previousTime >= T_BP) { 
